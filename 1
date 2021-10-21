@@ -1,0 +1,73 @@
+import logging
+
+from aiogram import Bot, Dispatcher, executor, types
+import aiogram
+from aiogram.types import InputFile
+from aiogram.types import ReplyKeyboardRemove,ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
+
+API_TOKEN = '2019302491:AAFS80zm_gr6EUsBvEL5g9RVlDR8Itsrl4c'
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher(bot)
+
+logging.basicConfig(level=logging.INFO)
+
+@dp.message_handler(commands=['start'])
+async def handle_text1(message:types.Message):
+    user_markup = aiogram.types.ReplyKeyboardMarkup(True, False)
+    user_markup.row("Пицца", "Роллы")
+    user_markup.row("Паста")
+    await bot.send_message(message.from_user.id, "Добрый день! Я - бот-курьер Katerin. В нашем ресторане довольно разнообразное меню. Вы хотите сделать заказ?",reply_markup=user_markup)
+    await bot.send_message(message.from_user.id, "Что вы предпочитаете?", reply_markup=user_markup)
+
+
+@dp.message_handler(content_types='text')
+ 
+
+
+class Keyboard(object):
+ async    def main_menu(self:types.Message,message:types.Message):
+        user_markup = aiogram.types.ReplyKeyboardMarkup(True, False)
+        user_markup.row("Пицца", "Роллы")
+        user_markup.row("Паста")
+        user_markup.row("/start")
+        self.bot.send_message(message.from_user.id, "Каков ваш выбор?", reply_markup=user_markup)
+
+ async    def katalog_pizza(self:types.Message, message:types.Message):
+        pizza_markup = aiogram.types.ReplyKeyboardMarkup(True, False)
+        pizza_markup.row("4 сыра", "Маргарита","Грибная")
+        pizza_markup.row("Вернуться назад")
+        pizza_markup.row("Главная")
+        self.bot.send_message(message.from_user.id, "Выберете раздел", reply_markup=pizza_markup)
+
+
+ async    def katalog_roll(self:types.Message, message:types.Message):
+        roll_markup = aiogram.types.ReplyKeyboardMarkup(True, False)
+        roll_markup.row("Филадельфия")
+        roll_markup.row("Дракон", "Унаги")
+        roll_markup.row("Вернуться назад")
+        roll_markup.row("Главная")
+        await self.bot.send_message(message.from_user.id, "Выберете раздел", reply_markup=roll_markup)
+
+
+ async    def katalog_pasta(self:types.Message, message:types.Message):
+        pasta_markup = aiogram.types.ReplyKeyboardMarkup(True, False)
+        pasta_markup.row("Фетучини")
+        pasta_markup.row("Болоньезе", "Арабьята")
+        pasta_markup.row("Вернуться назад")
+        pasta_markup.row("Главная")
+        await self.bot.send_message(message.from_user.id, "Выберете раздел", reply_markup=pasta_markup)
+
+ @dp.message_handler(lambda mess: mess == 'Вернуться назад', content_types=['text'])
+ async    def handle_text(message):
+       user_position = Keyboard
+       if user_position(Keyboard.main_menu(message)):
+        Keyboard.main_menu(message)
+       elif user_position(Keyboard.katalog_pizza(message)): 
+            Keyboard.katalog_pizza(message)
+       elif user_position(Keyboard.katalog_roll(message)): 
+            Keyboard.katalog_roll(message)
+       elif user_position(Keyboard.katalog_pasta(message)): 
+            Keyboard.katalog_pasta(message)
+
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
